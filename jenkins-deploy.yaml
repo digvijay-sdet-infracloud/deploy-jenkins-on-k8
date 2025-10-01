@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: jenkins-deploy
+  name: jenkins-deploy
+  namespace: jenkins
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jenkins-deploy
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: jenkins-deploy
+    spec:
+      initContainers:
+      - name: volume-permission
+        image: busybox
+        command: ["sh", "-c", "chown -R 1000:1000 /var/jenkins_home"]
+        volumeMounts:
+        - name: jenkins-home
+          mountPath: /var/jenkins_home
+      containers:
+      - image: jenkins/jenkins:latest-jdk21
+        name: jenkins
+        ports:
+          - containerPort: 8080
+          - containerPort: 50000
+        volumeMounts:
+        - mountPath: /var/jenkins_home
+          name: jenkins-home
+      volumes:
+      - name: jenkins-home
+        persistentVolumeClaim:
+          claimName: jenkins-pv-claim
+status: {}
