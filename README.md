@@ -11,11 +11,12 @@ Steps to Deploy Jenkins on K8
 2. Attach PV & PVC with storageclass and then mount the volume on pod/deployment
 3. Create a Nodeport service
 
-# Execute the jenkins service kubectl -n jenkins port-forward service/<jenkins-service-name> 8080:8080
+# Execute the jenkins service using below command 
 
-# then launch on localhost:8080 in your browser
+4. kubectl -n jenkins port-forward service/<jenkins-service-name> 8080:8080
+5. Launch http://localhost:8080
 
 # To get the initialpassword of jenkins under jenkins home directory
-1. k exec <pod-name> -n namespace -i -t -- bash <container-name>
-2. cd /var/jenkins-home/secrets
-3. cat initialPassword
+6. k exec <pod-name> -n namespace -i -t -- bash <container-name>
+7. cd /var/jenkins-home/secrets
+8. cat initialPassword
